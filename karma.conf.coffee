@@ -14,7 +14,7 @@ module.exports = (karma) ->
     files: [
       "vendors/angular/angular.js",
       "vendors/angular-mocks/angular-mocks.js",
-      "../dist/angular-storage.js",
+      "../dist/angular-store.js",
       "specs/*.js"
     ]
     singleRun: false

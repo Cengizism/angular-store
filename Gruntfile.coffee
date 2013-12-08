@@ -11,7 +11,6 @@ module.exports = (grunt) ->
         files: ["src/*.coffee"]
         tasks: [
           "coffee:dist"
-          "uglify:storage"
           "uglify:store"
         ]
     coffee:
@@ -26,21 +25,13 @@ module.exports = (grunt) ->
         options:
           sourceMap: true
           sourceRoot: "dist"
-
     uglify:
-      storage:
-        options:
-          sourceMap: "dist/angular-storage.js.map"
-          sourceMapRoot: "dist/"
-          sourceMapIn: "dist/angular-storage.js.map"
-        files:
-          "dist/angular-storage.min.js": ["dist/angular-storage.js"]
       store:
         options:
-          sourceMap: "dist/store.js.map"
+          sourceMap: "dist/angular-store.js.map"
           sourceMapRoot: "dist/"
-          sourceMapIn: "dist/store.js.map"
+          sourceMapIn: "dist/angular-store.js.map"
         files:
-          "dist/store.min.js": ["dist/store.js"]
+          "dist/angular-store.min.js": ["dist/angular-store.js"]
 
   grunt.registerTask "default", ["watch"]

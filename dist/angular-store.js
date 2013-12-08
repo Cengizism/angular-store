@@ -135,5 +135,5 @@
 }).call(this);
 
 /*
-//@ sourceMappingURL=angular-storage.js.map
+//@ sourceMappingURL=angular-store.js.map
 */
