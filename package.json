@@ -1,14 +1,11 @@
 {
   "name": "angular-storage",
   "version": "0.0.1",
-  "description": "Simple interface to handle local storage processes for any angular project.",
-  "main": "angular-storage.js",
-  "scripts": {
-    "test": "grunt test"
-  },
+  "description": "Local storage adapter for angular projects.",
+  "scripts": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/grevory/angular-storage.git"
+    "url": "https://github.com/cengizism/angular-store.git"
   },
   "keywords": [
     "AngularJS",
@@ -18,7 +15,7 @@
   "author": "Cengiz Ulusoy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cengizism/angular-storage/issues"
+    "url": "https://github.com/cengizism/angular-store/issues"
   },
   "dependencies": {
     "grunt": "~0.4.2"
@@ -38,6 +35,10 @@
     "karma-coffee-preprocessor": "~0.1.1",
     "karma-phantomjs-launcher": "~0.1.1",
     "karma-ng-scenario": "~0.1.0",
-    "karma-ng-html2js-preprocessor": "~0.1.0"
+    "karma-ng-html2js-preprocessor": "~0.1.0",
+    "marked": "~0.2.9",
+    "semver": "~2.1.0",
+    "grunt-release": "~0.5.1",
+    "grunt-conventional-changelog": "~1.0.0"
   }
 }
