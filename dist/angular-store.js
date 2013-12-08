@@ -7,7 +7,7 @@
     };
     this.$get = [
       function() {
-        var all, flush, get, prefix, remove, search, set, supported, treat, _deserialize, _serialize;
+        var flush, get, list, prefix, remove, search, set, supported, treat, _deserialize, _serialize;
         prefix = this.prefix;
         if (prefix.substr(-1) !== ".") {
           prefix = (!!prefix ? prefix + "." : "");
@@ -66,15 +66,16 @@
         search = function() {
           return true;
         };
-        all = function() {
-          var e, key, prefixLength, _locals;
+        list = function() {
+          var e, key, prefixLength, value, _locals;
           if (supported) {
             prefixLength = prefix.length;
-            _locals = [];
+            _locals = {};
             for (key in localStorage) {
+              value = localStorage[key];
               if (key.substr(0, prefixLength) === prefix) {
                 try {
-                  _locals.push(key.substr(prefixLength));
+                  _locals[key.substr(prefixLength)] = value.charAt(0) === "{" || value.charAt(0) === "[" ? angular.fromJson(value) : value;
                 } catch (_error) {
                   e = _error;
                   return [];
@@ -122,7 +123,7 @@
           set: set,
           get: get,
           search: search,
-          all: all,
+          list: list,
           treat: treat,
           remove: remove,
           flush: flush
