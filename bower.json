@@ -1,0 +1,23 @@
+{
+  "name": "angular-storage",
+  "version": "0.0.1",
+  "homepage": "",
+  "authors": ["Cengiz Ulusoy"],
+  "description": "Simple interface to handle local storage processes for any angular project.",
+  "main": "angular-storage.js",
+  "keywords": [
+    "AngularJS",
+    "Local Storage"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "vendors",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular-mocks": "~1.2.1"
+  }
+}
