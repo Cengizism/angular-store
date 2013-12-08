@@ -60,7 +60,6 @@ angular.module("storageModule", []).provider "storageService", ->
               return []
         _locals
 
-
     treat = ->
       true
 

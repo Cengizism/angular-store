@@ -4,3 +4,4 @@ test/vendors
 npm-debug.log
 demo
 .idea
+.tmp

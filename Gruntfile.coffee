@@ -22,7 +22,7 @@ module.exports = (grunt) ->
           expand: true
           cwd: "src"
           src: "*.coffee"
-          dest: "dist"
+          dest: ".tmp"
           ext: ".js"
         ]
         options:
@@ -33,9 +33,9 @@ module.exports = (grunt) ->
         options:
           sourceMap: "dist/angular-store.js.map"
           sourceMapRoot: "dist/"
-          sourceMapIn: "dist/angular-store.js.map"
+          sourceMapIn: ".tmp/angular-store.js.map"
         files:
-          "dist/angular-store.min.js": ["dist/angular-store.js"]
+          "dist/angular-store.min.js": [".tmp/angular-store.js"]
     changelog:
       options:
         dest: "CHANGELOG.md"
