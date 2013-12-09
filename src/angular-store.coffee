@@ -1,26 +1,14 @@
-"use strict"
+'use strict'
 
-angular.module("storageModule", []).provider "storageService", ->
+angular.module('storageModule', []).provider 'storageService', ->
 
-  @prefix = "myApp"
+  @prefix = 'myApp'
 
-  @setPrefix = (prefix) ->
-    @prefix = prefix
+  @setPrefix = (prefix) -> @prefix = prefix
 
   @$get = [() ->
     prefix = @prefix
-    prefix = (if !!prefix then prefix + "." else "")  if prefix.substr(-1) isnt "."
-
-    supported = ->
-      try
-        _supported = ("localStorage" of window and window["localStorage"] isnt null)
-        key = prefix + "__" + Math.round(Math.random() * 1e7)
-        if _supported
-          localStorage.setItem key, ""
-          localStorage.removeItem key
-        return true
-      catch e
-        return false
+    prefix = (if !!prefix then prefix + '.' else '')  if prefix.substr(-1) isnt '.'
 
     _serialize = (value) ->
       value = null unless value?
@@ -28,43 +16,66 @@ angular.module("storageModule", []).provider "storageService", ->
       value
 
     _deserialize = (value) ->
-      value = null if not value or value is "null"
-      if value? then angular.fromJson(value) if value.charAt(0) is "{" or value.charAt(0) is "["
+      value = null if not value or value is 'null'
+      if value? then angular.fromJson(value) if value.charAt(0) is '{' or value.charAt(0) is '['
       value
+
+    supported = ->
+      try
+        _supported = ('localStorage' of window and window['localStorage'] isnt null)
+        key = prefix + '__' + Math.round(Math.random() * 1e7)
+        if _supported
+          localStorage.setItem key, ''
+          localStorage.removeItem key
+        return true
+      catch e
+        console.log 'Local storage is not supported.', e
+        return false
 
     set = (key, value) ->
       if supported
         try
-          return localStorage.setItem prefix + key, _serialize value
+          localStorage.setItem prefix + key, _serialize value
+          return true
         catch e
+          console.log 'Setting a value in local storage is failed.', e
           return false
 
     get = (key) ->
       if supported
-        _deserialize localStorage.getItem(prefix + key)
+        try
+          return _deserialize localStorage.getItem(prefix + key)
+        catch e
+          console.log 'Getting a value from local storage is failed.', e
+          return false
 
     search = (query) ->
       if supported
-        query = query or ""
-        testRegex = RegExp(query)
-        _locals = {}
-        for key, value of list()
-          _locals[key] = value if testRegex.test(_serialize value)
-        _locals
+        try
+          query = query or ''
+          testRegex = RegExp(query)
+          _locals = {}
+          for key, value of list()
+            _locals[key] = value if testRegex.test(_serialize value)
+          _locals
+        catch e
+          console.log 'Searching in local storage is failed.', e
+          return false
 
     list = () ->
       if supported
-        prefixLength = prefix.length
-        _locals = {}
-        for key, value of localStorage
-          if key.substr(0, prefixLength) is prefix
-            try
+        try
+          prefixLength = prefix.length
+          _locals = {}
+          for key, value of localStorage
+            if key.substr(0, prefixLength) is prefix
               _locals[key.substr(prefixLength)] =
-                if value.charAt(0) is "{" or value.charAt(0) is "["
+                if value.charAt(0) is '{' or value.charAt(0) is '['
                 then angular.fromJson(value) else value
-            catch e
-              return []
-        _locals
+          _locals
+        catch e
+          console.log 'Getting the list of local storage values is failed.', e
+          return false
 
     treat = ->
       true
@@ -74,15 +85,16 @@ angular.module("storageModule", []).provider "storageService", ->
         try
           return localStorage.removeItem prefix + key
         catch e
+          console.log 'Removing a local storage value is failed.', e
           return false
 
     flush = () ->
       if supported
-        for key of list()
-          try
-            remove key
-          catch e
-            return false
+        try
+          remove key for key of list()
+        catch e
+          console.log 'Flushing local storage values is failed.', e
+          return false
 
     supported: supported
     set: set
