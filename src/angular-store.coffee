@@ -15,9 +15,12 @@ angular.module('storageModule', []).provider 'storageService', ->
       value = angular.toJson(value) if angular.isObject(value) or angular.isArray(value)
       value
 
+    _parsable = (value) ->
+      true if value.charAt(0) is '{' or value.charAt(0) is '['
+
     _deserialize = (value) ->
       value = null if not value or value is 'null'
-      if value? then angular.fromJson(value) if value.charAt(0) is '{' or value.charAt(0) is '['
+      if value? then angular.fromJson(value) if _parsable value
       value
 
     supported = ->
@@ -69,15 +72,36 @@ angular.module('storageModule', []).provider 'storageService', ->
           _locals = {}
           for key, value of localStorage
             if key.substr(0, prefixLength) is prefix
-              _locals[key.substr(prefixLength)] =
-                if value.charAt(0) is '{' or value.charAt(0) is '['
-                then angular.fromJson(value) else value
+              _locals[key.substr(prefixLength)] = if _parsable value then angular.fromJson(value) else value
           _locals
         catch e
           console.log 'Getting the list of local storage values is failed.', e
           return false
 
     treat = ->
+      ###
+      store.transact = function(key, defaultVal, transactionFn) {
+        var val = store.get(key)
+        if (transactionFn == null) {
+          transactionFn = defaultVal
+          defaultVal = null
+        }
+        if (typeof val == 'undefined') { val = defaultVal || {} }
+        transactionFn(val)
+        store.set(key, val)
+      }
+      ###
+      true
+
+    query = ->
+      ###
+        store.forEach = function(callback) {
+        for (var i=0; i<storage.length; i++) {
+          var key = storage.key(i)
+          callback(key, store.get(key))
+        }
+      }
+      ###
       true
 
     remove = (key) ->
