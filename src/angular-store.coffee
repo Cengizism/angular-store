@@ -1,6 +1,5 @@
 "use strict"
 
-
 angular.module("storageModule", []).provider "storageService", ->
 
   @prefix = "myApp"
@@ -48,19 +47,21 @@ angular.module("storageModule", []).provider "storageService", ->
       if supported
         query = query or ""
         testRegex = RegExp(query)
-        list testRegex
+        _locals = {}
+        for key, value of list()
+          _locals[key] = value if testRegex.test(_serialize value)
+        _locals
 
-    list = (query = null) ->
+    list = () ->
       if supported
         prefixLength = prefix.length
         _locals = {}
         for key, value of localStorage
           if key.substr(0, prefixLength) is prefix
             try
-              if query? and query.test(value)
-                _locals[key.substr(prefixLength)] =
-                  if value.charAt(0) is "{" or value.charAt(0) is "["
-                  then angular.fromJson(value) else value
+              _locals[key.substr(prefixLength)] =
+                if value.charAt(0) is "{" or value.charAt(0) is "["
+                then angular.fromJson(value) else value
             catch e
               return []
         _locals
