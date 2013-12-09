@@ -76,18 +76,13 @@ angular.module("storageModule", []).provider "storageService", ->
         catch e
           return false
 
-    flush = (regularExpression) ->
+    flush = () ->
       if supported
-        regularExpression = regularExpression or ""
-        tempPrefix = prefix.slice(0, -1) + "."
-        testRegex = RegExp(tempPrefix + regularExpression)
-        prefixLength = prefix.length
-        for key of localStorage
-          if testRegex.test(key)
-            try
-              remove key.substr(prefixLength)
-            catch e
-              return false
+        for key of list()
+          try
+            remove key
+          catch e
+            return false
 
     supported: supported
     set: set
