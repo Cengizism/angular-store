@@ -6,7 +6,7 @@ module.exports = (karma) ->
     autoWatch: true
     exclude: []
     reporters: ["progress"]
-    port: 8080
+    port: 8081
     runnerPort: 9100
     colors: true
     logLevel: karma.LOG_INFO
@@ -14,7 +14,7 @@ module.exports = (karma) ->
     files: [
       "vendors/angular/angular.js",
       "vendors/angular-mocks/angular-mocks.js",
-      "../dist/angular-store.js",
+      "../.tmp/angular-store.js",
       "specs/*.js"
     ]
     singleRun: false

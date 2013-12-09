@@ -11,9 +11,13 @@ module.exports = (grunt) ->
   grunt.initConfig
     watch:
       coffee:
-        files: ["src/*.coffee"]
+        files: [
+          "src/*.coffee"
+          "test/coffee/*.coffee"
+        ]
         tasks: [
           "coffee:dist"
+          "coffee:test"
           "uglify:store"
         ]
     coffee:
@@ -28,6 +32,17 @@ module.exports = (grunt) ->
         options:
           sourceMap: true
           sourceRoot: "dist"
+      test:
+        files: [
+          expand: true
+          cwd: "test/coffee"
+          src: "*.coffee"
+          dest: "test/specs"
+          ext: ".js"
+        ]
+        options:
+          bare: yes
+          sourceMap: false
     uglify:
       store:
         options:
