@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('storeModule', []).provider 'storageService', ->
+angular.module('storeModule', []).provider 'Store', ->
 
   @prefix = 'myApp'
 

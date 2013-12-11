@@ -1,16 +1,16 @@
 describe "Tests functionality of the localStorage module", ->
 
-  beforeEach module("storeModule", (storageServiceProvider) ->
-    window.p = storageServiceProvider
+  beforeEach module("storeModule", (StoreProvider) ->
+    window.p = StoreProvider
     return
   )
 
   ls = undefined
   store = []
 
-  beforeEach inject((_storageService_) ->
+  beforeEach inject((_Store_) ->
 
-    ls = _storageService_
+    ls = _Store_
 
     spyOn(ls, "get").andCallFake (key) ->
       if store[key].charAt(0) is "{" or store[key].charAt(0) is "["
@@ -42,6 +42,9 @@ describe "Tests functionality of the localStorage module", ->
   it "Should allow me to set a prefix", ->
     p.setPrefix "myPref"
     expect(p.prefix).toBe "myPref"
+
+  it "Should be both true", ->
+    expect(true).toBe true
 
   true
 

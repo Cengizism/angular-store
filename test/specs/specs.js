@@ -1,12 +1,12 @@
 describe("Tests functionality of the localStorage module", function() {
   var ls, store;
-  beforeEach(module("storeModule", function(storageServiceProvider) {
-    window.p = storageServiceProvider;
+  beforeEach(module("storeModule", function(StoreProvider) {
+    window.p = StoreProvider;
   }));
   ls = void 0;
   store = [];
-  beforeEach(inject(function(_storageService_) {
-    ls = _storageService_;
+  beforeEach(inject(function(_Store_) {
+    ls = _Store_;
     spyOn(ls, "get").andCallFake(function(key) {
       if (store[key].charAt(0) === "{" || store[key].charAt(0) === "[") {
         return angular.fromJson(store[key]);
@@ -43,6 +43,9 @@ describe("Tests functionality of the localStorage module", function() {
   it("Should allow me to set a prefix", function() {
     p.setPrefix("myPref");
     return expect(p.prefix).toBe("myPref");
+  });
+  it("Should be both true", function() {
+    return expect(true).toBe(true);
   });
   return true;
 });
