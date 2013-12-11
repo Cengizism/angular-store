@@ -1,6 +1,6 @@
 describe("Tests functionality of the localStorage module", function() {
   var ls, store;
-  beforeEach(module("storageModule", function(storageServiceProvider) {
+  beforeEach(module("storeModule", function(storageServiceProvider) {
     window.p = storageServiceProvider;
   }));
   ls = void 0;

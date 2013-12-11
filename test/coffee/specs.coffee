@@ -1,6 +1,6 @@
 describe "Tests functionality of the localStorage module", ->
 
-  beforeEach module("storageModule", (storageServiceProvider) ->
+  beforeEach module("storeModule", (storageServiceProvider) ->
     window.p = storageServiceProvider
     return
   )
