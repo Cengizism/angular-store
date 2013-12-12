@@ -12,7 +12,7 @@ angular.module('storeModule', []).provider 'Store', ->
 
     _serialize = (value) ->
       value = null unless value?
-      value = angular.toJson(value) if angular.isObject(value) or angular.isArray(value)
+      value = angular.toJson value if angular.isObject value or angular.isArray value
       value
 
     _parsable = (value) ->
@@ -20,7 +20,7 @@ angular.module('storeModule', []).provider 'Store', ->
 
     _deserialize = (value) ->
       value = null if not value or value is 'null'
-      if value? then angular.fromJson(value) if _parsable value
+      if value? then angular.fromJson value if _parsable value
       value
 
     supported = ->
@@ -52,19 +52,6 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Getting a value from local storage is failed.', e
           return false
 
-    search = (query) ->
-      if supported
-        try
-          query = query or ''
-          testRegex = RegExp(query)
-          _locals = {}
-          for key, value of list()
-            _locals[key] = value if testRegex.test(_serialize value)
-          _locals
-        catch e
-          console.log 'Searching in local storage is failed.', e
-          return false
-
     list = () ->
       if supported
         try
@@ -72,36 +59,47 @@ angular.module('storeModule', []).provider 'Store', ->
           _locals = {}
           for key, value of localStorage
             if key.substr(0, prefixLength) is prefix
-              _locals[key.substr(prefixLength)] = if _parsable value then angular.fromJson(value) else value
+              _locals[key.substr(prefixLength)] = if _parsable value then angular.fromJson value else value
           _locals
         catch e
           console.log 'Getting the list of local storage values is failed.', e
           return false
 
-    treat = ->
-      ###
-      store.transact = function(key, defaultVal, transactionFn) {
-        var val = store.get(key)
-        if (transactionFn == null) {
-          transactionFn = defaultVal
-          defaultVal = null
-        }
-        if (typeof val == 'undefined') { val = defaultVal || {} }
-        transactionFn(val)
-        store.set(key, val)
-      }
-      ###
-      true
+    search = (query) ->
+      if supported
+        try
+          query = query or ''
+          testRegex = RegExp query
+          _locals = {}
+          for key, value of list()
+            _locals[key] = value if testRegex.test _serialize value
+          _locals
+        catch e
+          console.log 'Searching in local storage is failed.', e
+          return false
 
-    query = ->
-      ###
-        store.forEach = function(callback) {
-        for (var i=0; i<storage.length; i++) {
-          var key = storage.key(i)
-          callback(key, store.get(key))
-        }
-      }
-      ###
+    key = (query) ->
+      if supported
+        try
+          query = query or ''
+          testRegex = RegExp query
+          _locals = []
+          for key of list()
+            _locals.push key if testRegex.test key
+          _locals
+        catch e
+          console.log 'Grabbing keys in local storage is failed.', e
+          return false
+
+    treat = (key, fn) ->
+      if supported
+        try
+          if fn
+            val = this.get(key)
+            this.set key, fn(val)
+        catch e
+          console.log 'Treating the given key is failed.', e
+          return false
       true
 
     remove = (key) ->
@@ -123,8 +121,9 @@ angular.module('storeModule', []).provider 'Store', ->
     supported: supported
     set: set
     get: get
-    search: search
     list: list
+    search: search
+    key: key
     treat: treat
     remove: remove
     flush: flush
