@@ -7,6 +7,7 @@ angular.module('storeModule', []).provider 'Store', ->
   @setPrefix = (prefix) -> @prefix = prefix
 
   @$get = [() ->
+
     prefix = @prefix
     prefix = (if !!prefix then prefix + '.' else '')  if prefix.substr(-1) isnt '.'
 
@@ -78,7 +79,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Searching in local storage is failed.', e
           return false
 
-    key = (query) ->
+    name = (query) ->
       if supported
         try
           query = query or ''
@@ -115,7 +116,24 @@ angular.module('storeModule', []).provider 'Store', ->
         try
           remove key for key of list()
         catch e
-          console.log 'Flushing local storage values is failed.', e
+          console.log 'Flushing (prefixed) local storage values is failed.', e
+          return false
+
+    nuke = () ->
+      if supported
+        try
+          localStorage.removeItem key for key of localStorage
+        catch e
+          console.log 'Flushing all local storage values is failed.', e
+          return false
+
+    prefixer = (name) ->
+      if supported
+        try
+          prefix = name
+          setPrefix name
+        catch e
+          console.log 'Prefix name could not be set.', e
           return false
 
     supported: supported
@@ -123,10 +141,12 @@ angular.module('storeModule', []).provider 'Store', ->
     get: get
     list: list
     search: search
-    key: key
+    name: name
     treat: treat
     remove: remove
     flush: flush
+    nuke: nuke
+    prefixer: prefixer
   ]
 
   true

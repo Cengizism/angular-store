@@ -9,6 +9,7 @@ module.exports = (grunt) ->
   require("time-grunt") grunt
 
   grunt.initConfig
+
     watch:
       coffee:
         files: [
@@ -20,6 +21,7 @@ module.exports = (grunt) ->
           "coffee:test"
           "uglify:store"
         ]
+
     coffee:
       dist:
         files: [
@@ -43,6 +45,7 @@ module.exports = (grunt) ->
         options:
           bare: yes
           sourceMap: false
+
     uglify:
       store:
         options:
@@ -51,10 +54,12 @@ module.exports = (grunt) ->
           sourceMapIn: ".tmp/angular-store.js.map"
         files:
           "dist/angular-store.min.js": [".tmp/angular-store.js"]
+
     changelog:
       options:
         dest: "CHANGELOG.md"
         versionFile: "package.json"
+
     release:
       options:
         commitMessage: "<%= version %>"
@@ -68,6 +73,7 @@ module.exports = (grunt) ->
         push: true
         pushTags: true
         npm: false
+
     stage:
       options:
         files: ["CHANGELOG.md"]

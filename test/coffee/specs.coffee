@@ -28,10 +28,10 @@ describe "Tests functionality of the localStorage module", ->
       store
   )
 
+
   it "Should add a value to my local storage", ->
     n = 234
     ls.set "test", n
-
     #Since localStorage makes the value a string, we look for the '234' and not 234
     expect(ls.get("test")).toBe "234"
     obj = key: "val"
@@ -39,9 +39,11 @@ describe "Tests functionality of the localStorage module", ->
     res = ls.get("object")
     expect(res.key).toBe "val"
 
+
   it "Should allow me to set a prefix", ->
-    p.setPrefix "myPref"
+    ls.prefixer "myPref"
     expect(p.prefix).toBe "myPref"
+
 
   it "Should be both true", ->
     expect(true).toBe true

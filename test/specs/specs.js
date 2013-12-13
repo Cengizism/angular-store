@@ -41,7 +41,7 @@ describe("Tests functionality of the localStorage module", function() {
     return expect(res.key).toBe("val");
   });
   it("Should allow me to set a prefix", function() {
-    p.setPrefix("myPref");
+    ls.prefixer("myPref");
     return expect(p.prefix).toBe("myPref");
   });
   it("Should be both true", function() {
