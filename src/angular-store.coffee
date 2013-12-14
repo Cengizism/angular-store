@@ -4,8 +4,6 @@ angular.module('storeModule', []).provider 'Store', ->
 
   @prefix = 'myApp'
 
-  @setPrefix = (prefix) -> @prefix = prefix
-
   @$get = [() ->
 
     prefix = @prefix
@@ -23,6 +21,14 @@ angular.module('storeModule', []).provider 'Store', ->
       value = null if not value or value is 'null'
       if value? then angular.fromJson value if _parsable value
       value
+
+    prefixer = (name) ->
+      if supported
+        try
+          prefix = name
+        catch e
+          console.log 'Prefix name could not be set.', e
+          return false
 
     supported = ->
       try
@@ -51,6 +57,14 @@ angular.module('storeModule', []).provider 'Store', ->
           return _deserialize localStorage.getItem(prefix + key)
         catch e
           console.log 'Getting a value from local storage is failed.', e
+          return false
+
+    exists = (key) ->
+      if supported
+        try
+          if get(key)? then return true else return false
+        catch e
+          console.log 'Something bad happened with checking on an existing key', e
           return false
 
     list = () ->
@@ -127,18 +141,11 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Flushing all local storage values is failed.', e
           return false
 
-    prefixer = (name) ->
-      if supported
-        try
-          prefix = name
-          setPrefix name
-        catch e
-          console.log 'Prefix name could not be set.', e
-          return false
-
+    prefixer: prefixer
     supported: supported
     set: set
     get: get
+    exists: exists
     list: list
     search: search
     name: name
@@ -146,7 +153,6 @@ angular.module('storeModule', []).provider 'Store', ->
     remove: remove
     flush: flush
     nuke: nuke
-    prefixer: prefixer
   ]
 
   true
