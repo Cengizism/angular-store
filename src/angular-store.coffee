@@ -2,26 +2,32 @@
 
 angular.module('storeModule', []).provider 'Store', ->
 
+  # default prefix value
   @prefix = 'myApp'
 
   @$get = [() ->
 
+    # work on prefix values
     prefix = @prefix
     prefix = (if !!prefix then prefix + '.' else '')  if prefix.substr(-1) isnt '.'
 
+    # serialize values
     _serialize = (value) ->
       value = null unless value?
       value = angular.toJson value if angular.isObject value or angular.isArray value
       value
 
+    # check whether the strings are parsable
     _parsable = (value) ->
       true if value.charAt(0) is '{' or value.charAt(0) is '['
 
+    # parse the strings
     _deserialize = (value) ->
       value = null if not value or value is 'null'
       if value? then angular.fromJson value if _parsable value
       value
 
+    # set prefixes
     prefixer = (name) ->
       if supported
         try
@@ -30,6 +36,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Prefix name could not be set.', e
           return false
 
+    # check if the localStorage is supported
     supported = ->
       try
         _supported = ('localStorage' of window and window['localStorage'] isnt null)
@@ -42,6 +49,7 @@ angular.module('storeModule', []).provider 'Store', ->
         console.log 'Local storage is not supported.', e
         return false
 
+    # set a localStorage value
     set = (key, value) ->
       if supported
         try
@@ -51,6 +59,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Setting a value in local storage is failed.', e
           return false
 
+    # get a localStorage value
     get = (key) ->
       if supported
         try
@@ -59,6 +68,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Getting a value from local storage is failed.', e
           return false
 
+    # check whether a give key exists in localStorage
     exists = (key) ->
       if supported
         try
@@ -67,6 +77,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Something bad happened with checking on an existing key', e
           return false
 
+    # all all prefixed localStorage values
     list = () ->
       if supported
         try
@@ -80,6 +91,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Getting the list of local storage values is failed.', e
           return false
 
+    # search in localStorage for a given query (only in values)
     search = (query) ->
       if supported
         try
@@ -93,6 +105,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Searching in local storage is failed.', e
           return false
 
+    # grab prefixed keys based on a given query
     name = (query) ->
       if supported
         try
@@ -106,6 +119,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Grabbing keys in local storage is failed.', e
           return false
 
+    # transact with localStorage value with given modifier function
     treat = (key, fn) ->
       if supported
         try
@@ -117,6 +131,7 @@ angular.module('storeModule', []).provider 'Store', ->
           return false
       true
 
+    # remove any localStorage value
     remove = (key) ->
       if supported
         try
@@ -125,6 +140,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Removing a local storage value is failed.', e
           return false
 
+    # flush all prefixed localStoage values
     flush = () ->
       if supported
         try
@@ -133,6 +149,7 @@ angular.module('storeModule', []).provider 'Store', ->
           console.log 'Flushing (prefixed) local storage values is failed.', e
           return false
 
+    # clear everything in localStorage
     nuke = () ->
       if supported
         try
